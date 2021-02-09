@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: shebang
+# key: !!
+# --
+if [ "x\$BASH_VERSION" = "x" ]; then
+    exec bash "\$0" "\$@"
+fi

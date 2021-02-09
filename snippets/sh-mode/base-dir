@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: base-dir
+# key: base-dir
+# --
+SHELL_DIR=\$(dirname "\$(realpath "\${BASH_SOURCE[0]}")")

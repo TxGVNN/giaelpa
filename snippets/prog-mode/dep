@@ -1,0 +1,4 @@
+# key: dep
+# name: deprecated
+# --
+`(yas-trimmed-comment-start)` @Deprecated`(unless (eq (length comment-end) 0) (concat " " (yas-trimmed-comment-end)))`

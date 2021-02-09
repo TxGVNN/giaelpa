@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: tmp
+# key: tmp
+# --
+scratch=\$(mktemp -t tmp.XXXXXX ${1:-ud})
+$0

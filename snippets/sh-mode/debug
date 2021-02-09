@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: debug
+# key: debug
+# --
+[ "\${DEBUG:-0}" -eq 0 ] || set -x
