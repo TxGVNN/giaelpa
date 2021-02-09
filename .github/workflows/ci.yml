@@ -8,6 +8,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 2
+        submodules: true
     - name: Install dependencies
       run: |
         sudo apt-get install emacs25
@@ -33,3 +34,16 @@ jobs:
               | jq -r '.[] | .filename')
 
         ./run-ci.sh
+    - name: Rebuild packages html
+      run: |
+        make packages packages/archive-contents
+
+    - name: Publish package html
+      run: |
+        cd packages
+        git checkout -b packages
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "generated"
+        git push origin packages
