@@ -1,1 +1,3 @@
-(1)
+(1
+ (consult . [(20210208 2315) ((emacs (26 1))) "Consulting completing-read" tar ((:commit . "bdb414a37e44f01d02f6392af66fa4aee7585b80") (:authors ("Daniel Mendler, Consult and Selectrum contributors")) (:maintainer "Daniel Mendler") (:url . "https://github.com/minad/consult"))])
+ (selectrum . [(20210204 1407) ((emacs (25 1))) "Easily select item from list" tar ((:commit . "1a5b2855f7944ce43667bebfde3497a231f5fc0d") (:authors ("Radon Rosborough" . "radon.neon@gmail.com")) (:maintainer "Radon Rosborough" . "radon.neon@gmail.com") (:keywords "extensions") (:url . "https://github.com/raxod502/selectrum"))]))

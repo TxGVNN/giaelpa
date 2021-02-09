@@ -1,0 +1,29 @@
+Package: consult
+Fetcher: github
+Source:  https://github.com/minad/consult.git
+
+Cloning https://github.com/minad/consult.git to /home/runner/work/giaelpa/giaelpa/working/consult/
+Copying files (->) and directories (=>)
+  from /home/runner/work/giaelpa/giaelpa/working/consult/
+  to /tmp/consult3545Wjo/consult-20210208.2315
+    consult-flymake.el -> consult-flymake.el
+    consult-icomplete.el -> consult-icomplete.el
+    consult-selectrum.el -> consult-selectrum.el
+    consult.el -> consult.el
+    consult.texi -> consult.texi
+Created /tmp/consult3545Wjo/consult-20210208.2315/consult.info
+Created consult-20210208.2315.tar containing:
+  consult-20210208.2315/
+  consult-20210208.2315/consult-flymake.el
+  consult-20210208.2315/consult-icomplete.el
+  consult-20210208.2315/consult-pkg.el
+  consult-20210208.2315/consult-selectrum.el
+  consult-20210208.2315/consult.el
+  consult-20210208.2315/consult.info
+  consult-20210208.2315/dir
+Built consult in 2.047s, finished at Tue Feb  9 13:06:31 2021
+ ✓ Success:
+4.0K -rw-r--r-- 1 runner docker  311 Feb  9 13:06 packages/consult-20210208.2315.entry
+220K -rw-r--r-- 1 runner docker 220K Feb  9 13:06 packages/consult-20210208.2315.tar
+4.0K -rw-r--r-- 1 runner docker 1.2K Feb  9 13:06 packages/consult-badge.svg
+4.0K -rw-r--r-- 1 runner docker  834 Feb  9 13:06 packages/consult-readme.txt
