@@ -1,0 +1,5 @@
+(yasnippet-snippets
+ :repo "TxGVNN/giaelpa"
+ :branch "recipes/yasnippet-snippets"
+ :fetcher github
+ :files ("*.el" "snippets" ".nosearch"))
