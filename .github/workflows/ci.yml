@@ -1,5 +1,5 @@
-name: ci
-on: [push, pull_request]
+name: pipeline
+on: [push]
 
 jobs:
   build:
@@ -23,17 +23,6 @@ jobs:
     - name: Run cask
       run: |
         ~/.cask/bin/cask
-    - name: Check changed recipes
-      run: |
-        [ "$GITHUB_EVENT_NAME" = "push" ] \
-          && export CHANGED_FILES=$(git diff-tree --name-only --no-commit-id -r ${{ github.sha }})
-
-        [ "$GITHUB_EVENT_NAME" = "pull_request" ] \
-          && export CHANGED_FILES=$(\
-            curl --silent https://api.github.com/repos/"$GITHUB_REPOSITORY"/pulls/${{ github.event.pull_request.number }}/files \
-              | jq -r '.[] | .filename')
-
-        ./run-ci.sh
     - name: Rebuild packages html
       run: |
         make packages packages/archive-contents
