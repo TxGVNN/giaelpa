@@ -1,0 +1,11 @@
+Package: crux
+Fetcher: github
+Source:  https://github.com/TxGVNN/giaelpa.git
+
+Cloning https://github.com/TxGVNN/giaelpa.git to /home/runner/work/giaelpa/giaelpa/working/crux/
+Built crux in 1.240s, finished at Tue Feb  9 15:41:07 2021
+ ✓ Success:
+ 40K -rw-r--r-- 1 runner docker  37K Feb  9 15:41 packages/crux-20210209.1459.el
+4.0K -rw-r--r-- 1 runner docker  370 Feb  9 15:41 packages/crux-20210209.1459.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K Feb  9 15:41 packages/crux-badge.svg
+4.0K -rw-r--r-- 1 runner docker   90 Feb  9 15:41 packages/crux-readme.txt

@@ -1,0 +1,11 @@
+(yasnippet-snippets .
+		    [(20210209 1536)
+		     ((yasnippet
+		       (0 8 0)))
+		     "Collection of yasnippet snippets" tar
+		     ((:commit . "11be6ae99860ffde1e9851e7136b0b0129eec24c")
+		      (:authors
+		       ("Andrea Crotti" . "andrea.crotti.0@gmail.com"))
+		      (:maintainer "Andrea Crotti" . "andrea.crotti.0@gmail.com")
+		      (:keywords "snippets")
+		      (:url . "https://github.com/AndreaCrotti/yasnippet-snippets"))])
