@@ -29,15 +29,18 @@ jobs:
 
     - name: Publish package html
       run: |
-        pushd packages
+        cd packages
         git checkout -b packages
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
         git commit -m "Generate packages"
         git push origin packages
-        # Update submodule
-        popd
+
+    - name: Update submodule
+      run: |
         git add -u
+        git config user.name github-actions
+        git config user.email github-actions@github.com
         git commit -m 'Update packages'
         git push origin master
