@@ -200,18 +200,27 @@ the current buffer."
         (funcall function))
     (switch-to-buffer-other-window buffer-name)))
 
+(defun crux-directory-domain-name()
+  "Return name.p.~."
+  (require 'shrink-path)
+  (let ((path (split-string (nreverse (shrink-path-dirs default-directory)) "/")))
+    (string-join (cons (nreverse (nth 1 path)) (nthcdr 2 path)) ".")))
+
 ;;;###autoload
-(defun crux-visit-term-buffer ()
+(defun crux-visit-term-buffer (&optional prefix)
   "Create or visit a terminal buffer.
-If the process in that buffer died, ask to restart."
-  (interactive)
-  (crux-start-or-switch-to (lambda ()
-                             (apply crux-term-func (list crux-term-buffer-name)))
-                           (format "*%s*" crux-term-buffer-name))
+If PREFIX is not nil, create visit in default-directory"
+  (interactive "P")
+  (let ((session "0"))
+    (if prefix
+        (setq session (crux-directory-domain-name)))
+    (crux-start-or-switch-to (lambda ()
+                               (ansi-term crux-shell (format "%s(%s)" crux-term-buffer-name session)))
+                             (format "*%s(%s)*" crux-term-buffer-name session)))
   (when (and (null (get-buffer-process (current-buffer)))
              (y-or-n-p "The process has died.  Do you want to restart it? "))
     (kill-buffer-and-window)
-    (crux-visit-term-buffer)))
+    (crux-visit-term-buffer prefix)))
 
 ;;;###autoload
 (defun crux-visit-shell-buffer ()
@@ -675,7 +684,8 @@ Doesn't mess with special buffers."
 (defun crux-create-scratch-buffer ()
   "Create a new scratch buffer."
   (interactive)
-  (let ((buf (generate-new-buffer "*scratch*")))
+  (let ((buf (generate-new-buffer
+              (format "*scratch-%s*" (format-time-string "%m%d-%H%M%S" (current-time))))))
     (switch-to-buffer buf)
     (funcall initial-major-mode)))
 
@@ -791,6 +801,216 @@ and the entire buffer (in the absense of a region)."
       (if mark-active
           (list (region-beginning) (region-end))
         (list (point) (line-end-position))))))
+
+;; https://codereview.stackexchange.com/questions/186840/binary-octal-decimal-and-hexadecimal-conversion-in-elisp
+(defun format-binary (b)
+  "Format number b -> binary."
+  (let ((s ""))
+    (while (> b 0)
+      (setq s (concat (number-to-string (logand b 1)) s))
+      (setq b (lsh b -1)))
+    (if (string= "" s) "0" s)))
+
+(defun radix-prefix (radix)
+  "Get radix prefix."
+  (cond ((eq radix 'binary) "0b")
+        ((eq radix 'octal) "0")
+        ((eq radix 'decimal) "")
+        ((eq radix 'hex) "0x")))
+
+(defun radix-format (radix)
+  "Get radix format."
+  (cond ((eq radix 'octal) "%o")
+        ((eq radix 'decimal) "%d")
+        ((eq radix 'hex) "%x")))
+
+(defun format-number-as (number radix)
+  (let ((prefix (radix-prefix radix)))
+    (if (eq radix 'binary)
+        (concat prefix (format-binary number))
+      (concat prefix (format (radix-format radix) number)))))
+
+;;;###autoload
+(defun crux-binary-encode-hex-string (hex-string)
+  "Encode HEX-STRING to BINARY."
+  (let ((res nil))
+    (dotimes (i (length hex-string) (apply #'concat (reverse res)))
+      (let* ((hex-char (substring hex-string i  (+ i 1)))
+             (binary-str (substring (format-number-as (string-to-number hex-char 16) 'binary)
+                                    (length (radix-prefix 'binary)))))
+        (push (concat (substring "0000" (length binary-str)) binary-str " ") res)))))
+
+;;;###autoload
+(defun crux-binary-encode-hex-region  (start end)
+  "Encode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((coding-system-for-read 'raw-text)
+           (coding-system-for-write buffer-file-coding-system)
+           (encoded-text
+            (crux-binary-encode-hex-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert encoded-text))))
+
+;;;###autoload
+(defun crux-bytes-encode-string (ascii-string)
+  "Encode ASCII-STRING to hex."
+  (let ((res nil))
+    (set-buffer-multibyte nil)
+    (dotimes (i (length ascii-string) (apply #'concat (reverse res)))
+      (let ((ascii-char (substring ascii-string i  (+ i 1))))
+        ;; (if (not (multibyte-string-p ascii-char)) ascii-char
+        ;;   (setq ascii-char (encode-coding-string ascii-char 'raw-text)))
+        (push (format "%d " (string-to-char ascii-char)) res)))))
+
+;;;###autoload
+(defun crux-bytes-encode-region (start end)
+  "Encode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((coding-system-for-read 'raw-text)
+           (coding-system-for-write buffer-file-coding-system)
+           (encoded-text
+            (crux-bytes-encode-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert encoded-text))))
+
+;;;###autoload
+(defun crux-hex-decode-string (hex-string)
+  "Decode to HEX-STRING."
+  (let ((res nil))
+    (dotimes (i (/ (length hex-string) 2) (apply #'concat (reverse res)))
+      (let ((hex-byte (substring hex-string (* 2 i) (* 2 (+ i 1)))))
+        (push (format "%c" (string-to-number hex-byte 16)) res)))))
+
+;;;###autoload
+(defun crux-hex-encode-string (ascii-string)
+  "Encode ASCII-STRING to hex."
+  (let ((res nil))
+    (dotimes (i (length ascii-string) (apply #'concat (reverse res)))
+      (let ((ascii-char (substring ascii-string i  (+ i 1))))
+        (if (not (multibyte-string-p ascii-char)) ascii-char
+          (setq ascii-char (encode-coding-string ascii-char locale-coding-system)))
+        (push (format "%.2x" (string-to-char ascii-char)) res)))))
+
+;;;###autoload
+(defun crux-hex-decode-region (start end)
+  "Decode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((coding-system-for-write 'raw-text)
+	       (coding-system-for-read buffer-file-coding-system)
+           (decoded-text
+            (crux-hex-decode-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert decoded-text))))
+
+;;;###autoload
+(defun crux-hex-encode-region (start end)
+  "Encode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((coding-system-for-read 'raw-text)
+           (coding-system-for-write buffer-file-coding-system)
+           (encoded-text
+            (crux-hex-encode-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert encoded-text))))
+
+(defvar crux-share-to-transfersh-host "https://transfersh.com"
+  "Provider host of transfer.sh.")
+;;;###autoload
+(defun crux-share-to-transfersh (&optional downloads)
+  "Share buffer to transfersh.com.
+- DOWNLOADS: The max-downloads"
+  (interactive "p")
+  (let ((temp-file
+         (make-temp-file nil nil (file-name-extension (buffer-name) t)))
+        (url crux-share-to-transfersh-host) (msg ""))
+    (if (region-active-p)
+        (write-region (point) (mark) temp-file)
+      (write-region (point-min) (point-max) temp-file))
+    (when (yes-or-no-p (format "Share to %s (%d)?" url downloads))
+      (when (yes-or-no-p "Encrypt?")
+        (let ((file-hash (md5 (buffer-string))))
+          (shell-command (format "openssl aes-256-cbc -md md5 -k %s -in '%s' -out '%s.enc'"
+                                 file-hash temp-file temp-file))
+          (dired-delete-file temp-file)
+          (setq temp-file (format "%s.enc" temp-file)
+                msg (format "| openssl aes-256-cbc -d -md md5 -k %s -in - 2>/dev/null"
+                            file-hash))))
+      (let ((output (format
+                     "curl -L %s 2>/dev/null %s"
+                     (shell-command-to-string
+                      (format "curl -q -H 'Max-Downloads: %d' --upload-file '%s' %s 2>/dev/null"
+                              downloads temp-file url)) msg)))
+        (kill-new output) (message output))
+      (dired-delete-file temp-file))))
+
+;;;###autoload
+(defun crux-share-to-paste.debian ()
+  "Share buffer to paste.debian.net."
+  (interactive)
+  (let ((temp-file
+         (make-temp-file nil nil (file-name-extension (buffer-name) t)))
+        (msg ""))
+    (if (region-active-p)
+        (write-region (point) (mark) temp-file)
+      (write-region (point-min) (point-max) temp-file))
+    (when (yes-or-no-p "Share to paste.debian.net?")
+      (when (yes-or-no-p "Encrypt?")
+        (let ((file-hash (md5 (buffer-string))))
+          (shell-command (format "openssl aes-256-cbc -md md5 -k %s -in '%s' | base64 > '%s.enc'"
+                                 file-hash temp-file temp-file))
+          (dired-delete-file temp-file)
+          (setq temp-file (format "%s.enc" temp-file)
+                msg (format "| base64 -d | openssl aes-256-cbc -d -md md5 -k %s -in - 2>/dev/null"
+                            file-hash))))
+      (find-file-read-only temp-file)
+      (debpaste-paste-buffer (get-file-buffer temp-file))
+      (let ((output
+             (format "curl -L %s 2>/dev/null %s"
+                     (debpaste-get-param-val 'download-url (debpaste-get-posted-info)) msg)))
+        (kill-new output) (message output))
+      (dired-delete-file temp-file))))
+
+;;;###autoload
+(defun crux-share-to-dpaste ()
+  "Share buffer to dpaste.com."
+  (interactive)
+  (let ((temp-file
+         (make-temp-file nil nil (file-name-extension (buffer-name) t)))
+        (msg ""))
+    (if (region-active-p)
+        (write-region (point) (mark) temp-file)
+      (write-region (point-min) (point-max) temp-file))
+    (when (yes-or-no-p "Share to dpaste.com?")
+      (when (yes-or-no-p "Encrypt?")
+        (let ((file-hash (md5 (buffer-string))))
+          (shell-command (format "openssl aes-256-cbc -md md5 -k %s -in '%s' | base64 > '%s.enc'"
+                                 file-hash temp-file temp-file))
+          (dired-delete-file temp-file)
+          (setq temp-file (format "%s.enc" temp-file)
+                msg (format "| base64 -d | openssl aes-256-cbc -d -md md5 -k %s -in - 2>/dev/null"
+                            file-hash))))
+      (find-file-read-only temp-file)
+      (dpaste-region (point-min) (point-max) (buffer-name))
+      (let ((output
+             (format "curl -L %s.txt 2>/dev/null %s" (car kill-ring) msg)))
+        (kill-new output) (message output))
+      (dired-delete-file temp-file))))
+
+;;;###autoload
+(defun crux-toggle-local-recompile()
+  "Toggle local recompile."
+  (interactive)
+  (if (memq 'recompile after-save-hook)
+      (remove-hook 'after-save-hook 'recompile t)
+    (add-hook 'after-save-hook 'recompile nil t)))
 
 (provide 'crux)
 ;;; crux.el ends here
