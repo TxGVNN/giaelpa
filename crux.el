@@ -1024,5 +1024,14 @@ and the entire buffer (in the absense of a region)."
       (remove-hook 'after-save-hook 'recompile t)
     (add-hook 'after-save-hook 'recompile nil t)))
 
+;;;###autoload
+(defun crux-kill-shell-exited ()
+  "Kill shell-mode is exited."
+  (interactive)
+  (mapcar  #'(lambda (buf)
+               (if (eq (buffer-local-value 'major-mode buf) 'shell-mode)
+                   (if (not (get-buffer-process buf))
+                       (kill-buffer buf))))
+           (buffer-list)))
 (provide 'crux)
 ;;; crux.el ends here
