@@ -1,9 +1,9 @@
 (crux .
-      [(20210209 1459)
+      [(20210411 1431)
        ((seq
 	 (1 11)))
        "A Collection of Ridiculously Useful eXtensions" single
-       ((:commit . "c4084b51a486cb169c1abae5a13bfda6f5e4903a")
+       ((:commit . "3cd7179a12658468d73ec69d719a9f282325e74f")
 	(:authors
 	 ("Bozhidar Batsov" . "bozhidar@batsov.com"))
 	(:maintainer "Bozhidar Batsov" . "bozhidar@batsov.com")

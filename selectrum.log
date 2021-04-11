@@ -3,19 +3,11 @@ Fetcher: github
 Source:  https://github.com/raxod502/selectrum.git
 
 Cloning https://github.com/raxod502/selectrum.git to /home/runner/work/giaelpa/giaelpa/working/selectrum/
-Copying files (->) and directories (=>)
-  from /home/runner/work/giaelpa/giaelpa/working/selectrum/
-  to /tmp/selectrum3423U0q/selectrum-20210204.1407
-    selectrum-helm.el -> selectrum-helm.el
-    selectrum.el -> selectrum.el
-Created selectrum-20210204.1407.tar containing:
-  selectrum-20210204.1407/
-  selectrum-20210204.1407/selectrum-helm.el
-  selectrum-20210204.1407/selectrum-pkg.el
-  selectrum-20210204.1407/selectrum.el
-Built selectrum in 1.544s, finished at Tue Feb  9 15:41:09 2021
+Built selectrum in 3.762s, finished at Sun Apr 11 14:34:37 2021
  ✓ Success:
-4.0K -rw-r--r-- 1 runner docker  387 Feb  9 15:41 packages/selectrum-20210204.1407.entry
-132K -rw-r--r-- 1 runner docker 130K Feb  9 15:41 packages/selectrum-20210204.1407.tar
-4.0K -rw-r--r-- 1 runner docker 1.2K Feb  9 15:41 packages/selectrum-badge.svg
-4.0K -rw-r--r-- 1 runner docker  745 Feb  9 15:41 packages/selectrum-readme.txt
+4.0K -rw-r--r-- 1 runner docker  387 Apr 11 14:34 packages/selectrum-20210204.1407.entry
+132K -rw-r--r-- 1 runner docker 130K Apr 11 14:34 packages/selectrum-20210204.1407.tar
+132K -rw-r--r-- 1 runner docker 130K Apr 11 14:34 packages/selectrum-20210411.1153.el
+4.0K -rw-r--r-- 1 runner docker  390 Apr 11 14:34 packages/selectrum-20210411.1153.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K Apr 11 14:34 packages/selectrum-badge.svg
+4.0K -rw-r--r-- 1 runner docker  745 Apr 11 14:34 packages/selectrum-readme.txt

@@ -1,9 +1,9 @@
 (consult .
-	 [(20210208 2315)
+	 [(20210410 1817)
 	  ((emacs
 	    (26 1)))
 	  "Consulting completing-read" tar
-	  ((:commit . "bdb414a37e44f01d02f6392af66fa4aee7585b80")
+	  ((:commit . "8362f9befce145714e6d8f084f0547c72d3a6439")
 	   (:authors
 	    ("Daniel Mendler, Consult and Selectrum contributors"))
 	   (:maintainer "Daniel Mendler")

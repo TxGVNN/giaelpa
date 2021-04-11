@@ -1,0 +1,23 @@
+Package: orderless
+Fetcher: github
+Source:  https://github.com/oantolin/orderless.git
+
+Cloning https://github.com/oantolin/orderless.git to /home/runner/work/giaelpa/giaelpa/working/orderless/
+Copying files (->) and directories (=>)
+  from /home/runner/work/giaelpa/giaelpa/working/orderless/
+  to /tmp/orderless3914-jw/orderless-20210407.1548
+    orderless.el -> orderless.el
+    orderless.texi -> orderless.texi
+Created /tmp/orderless3914-jw/orderless-20210407.1548/orderless.info
+Created orderless-20210407.1548.tar containing:
+  orderless-20210407.1548/
+  orderless-20210407.1548/dir
+  orderless-20210407.1548/orderless-pkg.el
+  orderless-20210407.1548/orderless.el
+  orderless-20210407.1548/orderless.info
+Built orderless in 2.317s, finished at Sun Apr 11 14:34:40 2021
+ ✓ Success:
+4.0K -rw-r--r-- 1 runner docker  417 Apr 11 14:34 packages/orderless-20210407.1548.entry
+ 52K -rw-r--r-- 1 runner docker  50K Apr 11 14:34 packages/orderless-20210407.1548.tar
+4.0K -rw-r--r-- 1 runner docker 1.2K Apr 11 14:34 packages/orderless-badge.svg
+4.0K -rw-r--r-- 1 runner docker 1.2K Apr 11 14:34 packages/orderless-readme.txt
