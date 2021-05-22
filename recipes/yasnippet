@@ -1,0 +1,3 @@
+(yasnippet :repo "TxGVNN/yasnippet"
+           :fetcher github
+           :files ("yasnippet.el" "snippets"))
