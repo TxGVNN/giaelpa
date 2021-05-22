@@ -3,11 +3,11 @@ Fetcher: github
 Source:  https://github.com/raxod502/selectrum.git
 
 Cloning https://github.com/raxod502/selectrum.git to /home/runner/work/giaelpa/giaelpa/working/selectrum/
-Built selectrum in 0.779s, finished at Sat May  8 12:25:30 2021
+Built selectrum in 1.919s, finished at Sat May 22 13:54:56 2021
  ✓ Success:
-132K -rw-r--r-- 1 runner docker 130K May  8 12:25 packages/selectrum-20210411.1153.el
-4.0K -rw-r--r-- 1 runner docker  390 May  8 12:25 packages/selectrum-20210411.1153.entry
-132K -rw-r--r-- 1 runner docker 130K May  8 12:25 packages/selectrum-20210423.1822.el
-4.0K -rw-r--r-- 1 runner docker  390 May  8 12:25 packages/selectrum-20210423.1822.entry
-4.0K -rw-r--r-- 1 runner docker 1.2K May  8 12:25 packages/selectrum-badge.svg
-4.0K -rw-r--r-- 1 runner docker  745 May  8 12:25 packages/selectrum-readme.txt
+132K -rw-r--r-- 1 runner docker 130K May 22 13:54 packages/selectrum-20210423.1822.el
+4.0K -rw-r--r-- 1 runner docker  390 May 22 13:54 packages/selectrum-20210423.1822.entry
+132K -rw-r--r-- 1 runner docker 130K May 22 13:54 packages/selectrum-20210520.1825.el
+4.0K -rw-r--r-- 1 runner docker  390 May 22 13:54 packages/selectrum-20210520.1825.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/selectrum-badge.svg
+4.0K -rw-r--r-- 1 runner docker  745 May 22 13:54 packages/selectrum-readme.txt

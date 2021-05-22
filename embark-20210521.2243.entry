@@ -1,9 +1,9 @@
 (embark .
-	[(20210430 1740)
+	[(20210521 2243)
 	 ((emacs
 	   (26 1)))
 	 "Conveniently act on minibuffer completions" tar
-	 ((:commit . "05aa11bca37db1751c86fe78f784741be5b1a066")
+	 ((:commit . "80adfc42de47d94840c78606ff733d19e9037223")
 	  (:authors
 	   ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	  (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")

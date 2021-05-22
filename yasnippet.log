@@ -1,0 +1,16 @@
+Package: yasnippet
+Fetcher: github
+Source:  https://github.com/TxGVNN/yasnippet.git
+
+Cloning https://github.com/TxGVNN/yasnippet.git to /home/runner/work/giaelpa/giaelpa/working/yasnippet/
+Built yasnippet in 1.889s, finished at Sat May 22 13:54:59 2021
+ ✓ Success:
+216K -rw-r--r-- 1 runner docker 215K May 22 13:54 packages/yasnippet-20210509.352.el
+4.0K -rw-r--r-- 1 runner docker  340 May 22 13:54 packages/yasnippet-20210509.352.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/yasnippet-badge.svg
+4.0K -rw-r--r-- 1 runner docker 2.8K May 22 13:54 packages/yasnippet-readme.txt
+4.0K -rw-r--r-- 1 runner docker  440 May 22 13:54 packages/yasnippet-snippets-20210209.1536.entry
+2.3M -rw-r--r-- 1 runner docker 2.3M May 22 13:54 packages/yasnippet-snippets-20210209.1536.tar
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/yasnippet-snippets-badge.svg
+4.0K -rw-r--r-- 1 runner docker   55 May 22 13:54 packages/yasnippet-snippets-readme.txt
+144K -rw-r--r-- 1 runner docker 144K May 22 13:54 packages/yasnippet-snippets.log

@@ -3,11 +3,9 @@ Fetcher: github
 Source:  https://github.com/TxGVNN/giaelpa.git
 
 Cloning https://github.com/TxGVNN/giaelpa.git to /home/runner/work/giaelpa/giaelpa/working/crux/
-Built crux in 0.724s, finished at Sat May  8 12:25:29 2021
+Built crux in 1.257s, finished at Sat May 22 13:54:54 2021
  ✓ Success:
- 40K -rw-r--r-- 1 runner docker  38K May  8 12:25 packages/crux-20210411.1431.el
-4.0K -rw-r--r-- 1 runner docker  370 May  8 12:25 packages/crux-20210411.1431.entry
- 40K -rw-r--r-- 1 runner docker  39K May  8 12:25 packages/crux-20210508.1213.el
-4.0K -rw-r--r-- 1 runner docker  370 May  8 12:25 packages/crux-20210508.1213.entry
-4.0K -rw-r--r-- 1 runner docker 1.2K May  8 12:25 packages/crux-badge.svg
-4.0K -rw-r--r-- 1 runner docker   90 May  8 12:25 packages/crux-readme.txt
+ 40K -rw-r--r-- 1 runner docker  39K May 22 13:54 packages/crux-20210508.1213.el
+4.0K -rw-r--r-- 1 runner docker  370 May 22 13:54 packages/crux-20210508.1213.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/crux-badge.svg
+4.0K -rw-r--r-- 1 runner docker   90 May 22 13:54 packages/crux-readme.txt

@@ -1,0 +1,11 @@
+Package: perspective
+Fetcher: github
+Source:  https://github.com/TxGVNN/perspective-el.git
+
+Cloning https://github.com/TxGVNN/perspective-el.git to /home/runner/work/giaelpa/giaelpa/working/perspective/
+Built perspective in 1.207s, finished at Sat May 22 13:54:50 2021
+ ✓ Success:
+ 72K -rw-r--r-- 1 runner docker  70K May 22 13:54 packages/perspective-20210522.1342.el
+4.0K -rw-r--r-- 1 runner docker  464 May 22 13:54 packages/perspective-20210522.1342.entry
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/perspective-badge.svg
+4.0K -rw-r--r-- 1 runner docker  580 May 22 13:54 packages/perspective-readme.txt

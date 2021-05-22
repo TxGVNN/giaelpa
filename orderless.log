@@ -5,21 +5,21 @@ Source:  https://github.com/oantolin/orderless.git
 Cloning https://github.com/oantolin/orderless.git to /home/runner/work/giaelpa/giaelpa/working/orderless/
 Copying files (->) and directories (=>)
   from /home/runner/work/giaelpa/giaelpa/working/orderless/
-  to /tmp/orderless34066Mo/orderless-20210507.1645
+  to /tmp/orderless3490x0Q/orderless-20210518.1413
     orderless.el -> orderless.el
     orderless.texi -> orderless.texi
-Created /tmp/orderless34066Mo/orderless-20210507.1645/orderless.info
-Created orderless-20210507.1645.tar containing:
-  orderless-20210507.1645/
-  orderless-20210507.1645/dir
-  orderless-20210507.1645/orderless-pkg.el
-  orderless-20210507.1645/orderless.el
-  orderless-20210507.1645/orderless.info
-Built orderless in 0.859s, finished at Sat May  8 12:25:31 2021
+Created /tmp/orderless3490x0Q/orderless-20210518.1413/orderless.info
+Created orderless-20210518.1413.tar containing:
+  orderless-20210518.1413/
+  orderless-20210518.1413/dir
+  orderless-20210518.1413/orderless-pkg.el
+  orderless-20210518.1413/orderless.el
+  orderless-20210518.1413/orderless.info
+Built orderless in 1.506s, finished at Sat May 22 13:54:57 2021
  ✓ Success:
-4.0K -rw-r--r-- 1 runner docker  417 May  8 12:25 packages/orderless-20210407.1548.entry
- 52K -rw-r--r-- 1 runner docker  50K May  8 12:25 packages/orderless-20210407.1548.tar
-4.0K -rw-r--r-- 1 runner docker  417 May  8 12:25 packages/orderless-20210507.1645.entry
- 52K -rw-r--r-- 1 runner docker  50K May  8 12:25 packages/orderless-20210507.1645.tar
-4.0K -rw-r--r-- 1 runner docker 1.2K May  8 12:25 packages/orderless-badge.svg
-4.0K -rw-r--r-- 1 runner docker 1.2K May  8 12:25 packages/orderless-readme.txt
+4.0K -rw-r--r-- 1 runner docker  417 May 22 13:54 packages/orderless-20210507.1645.entry
+ 52K -rw-r--r-- 1 runner docker  50K May 22 13:54 packages/orderless-20210507.1645.tar
+4.0K -rw-r--r-- 1 runner docker  417 May 22 13:54 packages/orderless-20210518.1413.entry
+ 52K -rw-r--r-- 1 runner docker  50K May 22 13:54 packages/orderless-20210518.1413.tar
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/orderless-badge.svg
+4.0K -rw-r--r-- 1 runner docker 1.2K May 22 13:54 packages/orderless-readme.txt

@@ -6,8 +6,8 @@
 ;; Created: 8 Dec 2019
 ;; Homepage: https://github.com/raxod502/selectrum
 ;; Keywords: extensions
-;; Package-Version: 20210423.1822
-;; Package-Commit: 8629ab5a6de572ada9dd5b18162a393969d9ebdf
+;; Package-Version: 20210520.1825
+;; Package-Commit: a922b19f715ad6d046072a35a3df5ac5e4ed73d3
 ;; Package-Requires: ((emacs "26.1"))
 ;; SPDX-License-Identifier: MIT
 ;; Version: 3.1
@@ -871,14 +871,25 @@ content height is greater than the window height."
 
 (defun selectrum--group-by (fun elems)
   "Group ELEMS by FUN."
-  (let ((groups))
-    (dolist (cand elems)
-      (let* ((key (funcall fun cand nil))
-             (group (assoc key groups)))
-        (if group
-            (setcdr group (cons cand (cdr group)))
-          (push (list key cand) groups))))
-    (mapcan (lambda (x) (nreverse (cdr x))) (nreverse groups))))
+  (when elems
+    (let ((group-list)
+          (group-hash (make-hash-table :test #'equal)))
+      (while elems
+        (let* ((key (funcall fun (car elems) nil))
+               (group (gethash key group-hash)))
+          (if group
+              ;; Append to tail of group
+              (setcdr group (setcdr (cdr group) elems))
+            (setq group (cons elems elems)) ;; (head . tail)
+            (push group group-list)
+            (puthash key group group-hash))
+          (setq elems (cdr elems))))
+      (setcdr (cdar group-list) nil) ;; Unlink last tail
+      (setq group-list (nreverse group-list))
+      (prog1 (caar group-list)
+        (while (cdr group-list) ;; Link groups
+          (setcdr (cdar group-list) (caadr group-list))
+          (setq group-list (cdr group-list)))))))
 
 (defun selectrum--vertical-display-style
     (win input nrows _ncols index
@@ -917,8 +928,8 @@ displayed first and LAST-INDEX-DISPLAYED the index of the last one."
                   (plist-get completion-extra-properties
                              :affixation-function)))
          (docsigf (plist-get completion-extra-properties :company-docsig))
-         (titlef (and selectrum-group-format
-                      (completion-metadata-get metadata 'x-title-function)))
+         (groupf (and selectrum-group-format
+                      (completion-metadata-get metadata 'group-function)))
          (candidates (cond (aff
                             (selectrum--affixate aff highlighted-candidates))
                            ((or annotf docsigf)
@@ -928,11 +939,11 @@ displayed first and LAST-INDEX-DISPLAYED the index of the last one."
          (last-title nil)
          (lines ()))
     (dolist (cand candidates)
-      (when-let (new-title (and titlef (funcall titlef cand nil)))
+      (when-let (new-title (and groupf (funcall groupf cand nil)))
         (unless (equal last-title new-title)
           (push (format selectrum-group-format (setq last-title new-title)) lines)
           (push "\n" lines))
-        (setq cand (funcall titlef cand 'transform)))
+        (setq cand (funcall groupf cand 'transform)))
       (let* ((formatting-current-candidate
               (eq i index))
              (newline
@@ -1140,7 +1151,7 @@ defaults to the current one and MAX which defaults to
 (defun selectrum--preprocess (candidates)
   "Preprocess CANDIDATES list.
 The preprocessing applies the `selectrum-preprocess-candidates-function'
-and the `x-title-function'."
+and the `group-function'."
   (setq-local selectrum--preprocessed-candidates
               (funcall selectrum-preprocess-candidates-function
                        candidates))
@@ -1202,7 +1213,7 @@ and the `x-title-function'."
                          input cands)))
   ;; Group candidates. This has to be done after refinement, since
   ;; refinement can reorder the candidates.
-  (when-let (titlef (selectrum--get-meta 'x-title-function))
+  (when-let (groupf (selectrum--get-meta 'group-function))
     ;; Ensure that default candidate appears at the top if
     ;; `selectrum-move-default-candidate' is set. It is redundant to
     ;; do this here, since we move the default candidate also
@@ -1216,7 +1227,7 @@ and the `x-title-function'."
                    selectrum--refined-candidates)))
     (setq-local
      selectrum--refined-candidates
-     (selectrum--group-by titlef selectrum--refined-candidates)))
+     (selectrum--group-by groupf selectrum--refined-candidates)))
   (when selectrum--virtual-default-file
     (unless (equal selectrum--virtual-default-file "")
       (setq-local selectrum--refined-candidates
@@ -2260,9 +2271,7 @@ KEYS is a list of key strings to combine."
 (cl-defun selectrum--read
     (prompt candidates &rest args &key
             default-candidate initial-input require-match
-            history
-            minibuffer-completion-table
-            minibuffer-completion-predicate)
+            history mc-table mc-predicate)
   "Prompt user with PROMPT to select one of CANDIDATES.
 Return the selected string.
 
@@ -2297,12 +2306,10 @@ this case.
 HISTORY is the `minibuffer-history-variable' to use (by default
 `minibuffer-history').
 
-For MINIBUFFER-COMPLETION-TABLE and
-MINIBUFFER-COMPLETION-PREDICATE see `minibuffer-completion-table'
+For MC-TABLE and MC-PREDICATE see `minibuffer-completion-table'
 and `minibuffer-completion-predicate'. They are used for internal
-purposes and compatibility to Emacs completion API. By passing
-these as keyword arguments they will be dynamically bound as per
-semantics of `cl-defun'."
+purposes and compatibility to Emacs completion API. They will be
+locally in the minibuffer."
   (let* ((minibuffer-allow-text-properties t)
          (resize-mini-windows 'grow-only)
          (prompt (selectrum--remove-default-from-prompt prompt))
@@ -2315,7 +2322,9 @@ semantics of `cl-defun'."
                 ;; Already set the active flag as early as possible
                 ;; so client setup hooks can use it to detect if
                 ;; they are running in a Selectrum session.
-                (setq-local selectrum-is-active t))
+                (setq-local selectrum-is-active t)
+                (setq-local minibuffer-completion-table mc-table)
+                (setq-local minibuffer-completion-predicate mc-predicate))
             (selectrum--minibuffer-with-setup-hook
                 (:append (lambda ()
                            (setq-local selectrum--match-is-required
@@ -2363,8 +2372,8 @@ HIST, DEF, and INHERIT-INPUT-METHOD, see `completing-read'."
    :default-candidate def
    :require-match require-match
    :history hist
-   :minibuffer-completion-table collection
-   :minibuffer-completion-predicate predicate))
+   :mc-table collection
+   :mc-predicate predicate))
 
 ;;;###autoload
 (defun selectrum-completing-read-multiple
@@ -2427,8 +2436,8 @@ the prompt."
         :initial-input initial-input
         :history hist
         :default-candidate def
-        :minibuffer-completion-table table
-        :minibuffer-completion-predicate predicate)))
+        :mc-table table
+        :mc-predicate predicate)))
     (split-string res crm-separator t)))
 
 ;;;###autoload
@@ -2518,8 +2527,8 @@ COLLECTION, and PREDICATE, see `completion-in-region'."
                           (car cands)
                         (selectrum--read
                          "Completion: " cands
-                         :minibuffer-completion-table collection
-                         :minibuffer-completion-predicate predicate))
+                         :mc-table collection
+                         :mc-predicate predicate))
                       exit-status (cond ((not (member result cands)) 'sole)
                                         (t 'finished)))))
              (delete-region bound end)
@@ -2568,8 +2577,8 @@ PREDICATE, see `read-buffer'."
        :default-candidate def
        :require-match require-match
        :history 'buffer-name-history
-       :minibuffer-completion-table #'internal-complete-buffer
-       :minibuffer-completion-predicate predicate))))
+       :mc-table #'internal-complete-buffer
+       :mc-predicate predicate))))
 
 (defun selectrum--partial-file-completions
     (path collection predicate &optional raw)
@@ -2754,8 +2763,8 @@ For PROMPT, COLLECTION, PREDICATE, REQUIRE-MATCH, INITIAL-INPUT,
        :initial-input (or (car-safe initial-input) initial-input)
        :history hist
        :require-match require-match
-       :minibuffer-completion-table collection
-       :minibuffer-completion-predicate predicate))))
+       :mc-table collection
+       :mc-predicate predicate))))
 
 ;;;###autoload
 (defun selectrum-read-file-name
