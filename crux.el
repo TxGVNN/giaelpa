@@ -1055,5 +1055,15 @@ and the entire buffer (in the absense of a region)."
                    (if (not (get-buffer-process buf))
                        (kill-buffer buf))))
            (buffer-list)))
+
+;;;###autoload
+(defun crux-ssh-set-auth-sock(&optional file)
+  "Set ssh-auth-sock(FILE)."
+  (interactive
+   (list (read-file-name "Select SSH_AUTH_SOCK file: " "/tmp/" nil t "ssh")))
+  (if (not (file-name-absolute-p file))
+      (user-error "%s is not an absolute path" file))
+  (setenv "SSH_AUTH_SOCK" file))
+
 (provide 'crux)
 ;;; crux.el ends here
