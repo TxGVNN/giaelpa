@@ -1,7 +1,7 @@
 ;;; project.el --- Operations on the current project  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015-2021 Free Software Foundation, Inc.
-;; Version: 0.6.0
+;; Version: 0.6.1
 ;; Package-Requires: ((emacs "26.1") (xref "1.0.2"))
 
 ;; This is a GNU ELPA :core package.  Avoid using functionality that
@@ -885,7 +885,7 @@ PREDICATE, HIST, and DEFAULT have the same meaning as in
                     (lambda ()
                       (let ((minibuffer-default default))
                         (minibuffer-default-add-completions)))))
-    (completing-read prompt
+    (completing-read (format "%s: " prompt)
                      collection predicate 'confirm
                      nil
                      hist)))
@@ -1379,8 +1379,8 @@ to directory DIR."
                 (define-key temp-map (vector keychar) cmd)))))
          command)
     (while (not command)
-      (let ((overriding-local-map commands-map)
-            (choice (read-key-sequence (project--keymap-prompt))))
+      (let* ((overriding-local-map commands-map)
+             (choice (read-key-sequence (project--keymap-prompt))))
         (when (setq command (lookup-key commands-map choice))
           (unless (or project-switch-use-entire-map
                       (assq command commands-menu))
