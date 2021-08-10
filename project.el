@@ -1187,6 +1187,22 @@ interactively."
                                 (project-root pr)))
            (mapc #'kill-buffer bufs)))))
 
+;;;###autoload
+(defun project-save-buffers ()
+  "Save all project buffers."
+  (interactive)
+  (let* ((project (project-current t))
+         (buffers (project--buffer-list project))
+         (modified-buffers (cl-remove-if-not (lambda (buf)
+                                               (and (buffer-file-name buf)
+                                                    (buffer-modified-p buf)))
+                                             buffers)))
+    (if (null modified-buffers)
+        (message "No buffers need saving")
+      (dolist (buf modified-buffers)
+        (with-current-buffer buf
+          (save-buffer)))
+      (message "Saved %d buffers" (length modified-buffers)))))
 
 ;;; Project list
 
