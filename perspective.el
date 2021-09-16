@@ -665,6 +665,7 @@ perspective's local variables are set.
 If NORECORD is non-nil, do not update the
 `persp-last-switch-time' for the switched perspective."
   (interactive "i")
+ (unless (> (minibuffer-depth) 0)
   (unless (persp-valid-name-p name)
     (setq name (persp-prompt (and (persp-last) (persp-name (persp-last))))))
   (if (and (persp-curr) (equal name (persp-current-name))) name
@@ -679,7 +680,7 @@ If NORECORD is non-nil, do not update the
       (unless norecord
         (setf (persp-last-switch-time persp) (current-time))
         (run-hooks 'persp-switch-hook))
-      name)))
+      name))))
 
 (defun persp-switch-by-number (num)
   "Switch to the perspective given by NUMBER."
