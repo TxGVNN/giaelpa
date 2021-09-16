@@ -1,1 +1,1 @@
-(perspective :fetcher github :repo "TxGVNN/perspective-el")
+(perspective :fetcher github :repo "TxGVNN/giaelpa" :branch "recipes/perspective")
