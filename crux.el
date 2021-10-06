@@ -1063,7 +1063,8 @@ and the entire buffer (in the absense of a region)."
    (list (read-file-name "Select SSH_AUTH_SOCK file: " "/tmp/" nil t "ssh")))
   (if (not (file-name-absolute-p file))
       (user-error "%s is not an absolute path" file))
-  (setenv "SSH_AUTH_SOCK" file))
+  (setenv "SSH_AUTH_SOCK" file)
+  (message (shell-command-to-string "ssh-add -l")))
 
 (provide 'crux)
 ;;; crux.el ends here
