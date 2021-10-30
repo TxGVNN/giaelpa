@@ -1,4 +1,0 @@
-(project
- :fetcher github
- :repo "TxGVNN/giaelpa"
- :branch "recipes/project")
