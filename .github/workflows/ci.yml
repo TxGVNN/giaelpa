@@ -31,6 +31,11 @@ jobs:
     - name: Run cask
       run: |
         ~/.cask/bin/cask
+
+    - name: Clean packages html
+      run: |
+        rm -rf packages/*
+
     - name: Rebuild packages html
       run: |
         make packages packages/archive-contents
@@ -38,17 +43,11 @@ jobs:
     - name: Publish package html
       run: |
         cd packages
-        git checkout -b packages
+        branch=$(date +%s)
+        git checkout --orphan "${branch}"
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
         git commit -m "Generate packages"
         git push origin packages
-
-    - name: Update submodule
-      run: |
-        git add -u
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git commit -m 'Update packages'
-        git push origin master
+        git push origin "${branch}:refs/heads/packages"
