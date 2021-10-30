@@ -32,10 +32,6 @@ jobs:
       run: |
         ~/.cask/bin/cask
 
-    - name: Clean packages html
-      run: |
-        rm -rf packages/*
-
     - name: Rebuild packages html
       run: |
         make packages packages/archive-contents
@@ -43,10 +39,10 @@ jobs:
     - name: Publish package html
       run: |
         cd packages
-        branch=$(date +%s)
-        git checkout --orphan "${branch}"
+        git init --initial-branch=packages
+        cp ../.git/config .git/
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add .
-        git commit -m "Generate packages"
-        git push --force origin "${branch}:refs/heads/packages"
+        git commit -m "Build packages"
+        git push --force origin packages
