@@ -49,5 +49,4 @@ jobs:
         git config user.email github-actions@github.com
         git add .
         git commit -m "Generate packages"
-        git push origin packages
-        git push origin "${branch}:refs/heads/packages"
+        git push --force origin "${branch}:refs/heads/packages"
