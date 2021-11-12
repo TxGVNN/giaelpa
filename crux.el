@@ -6,7 +6,7 @@
 ;; URL: https://github.com/bbatsov/crux
 ;; Version: 0.4.0
 ;; Keywords: convenience
-;; Package-Requires: ((seq "1.11"))
+;; Package-Requires: ((seq "1.11") (shrink-path))
 
 ;; This file is not part of GNU Emacs.
 
@@ -37,6 +37,7 @@
 (require 'thingatpt)
 (require 'seq)
 (require 'tramp)
+(require 'shrink-path)
 
 (declare-function dired-get-file-for-visit "dired")
 (declare-function org-element-property "org-element")
@@ -204,7 +205,6 @@ the current buffer."
 
 (defun crux-directory-domain-name()
   "Return name.p.~."
-  (require 'shrink-path)
   (let ((path (split-string (nreverse (shrink-path-dirs default-directory)) "/")))
     (string-join (cons (nreverse (nth 1 path)) (nthcdr 2 path)) ".")))
 
@@ -223,6 +223,7 @@ If PREFIX is not nil, create visit in default-directory"
       (kill-buffer-and-window)
       (ansi-term crux-shell (format "%s(%s)" crux-term-buffer-name session)))))
 
+;;;###autoload
 (defun crux-visit-shell-buffer (&optional prefix)
   "Create or visit a terminal buffer.
 If PREFIX is not nil, create visit in default-directory"
@@ -946,8 +947,10 @@ and the entire buffer (in the absense of a region)."
       (delete-region start end)
       (insert encoded-text))))
 
-(defvar crux-share-to-transfersh-host "https://transfer.sh"
-  "Provider host of transfer.sh.")
+(defcustom crux-share-to-transfersh-host "https://transfer.sh"
+  "Provider host of transfer.sh."
+  :type 'string
+  :group 'crux)
 ;;;###autoload
 (defun dired-share-to-transfersh (&optional downloads)
   "Share file to transfersh.
