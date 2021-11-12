@@ -946,6 +946,28 @@ and the entire buffer (in the absense of a region)."
              (buffer-substring-no-properties start end))))
       (delete-region start end)
       (insert encoded-text))))
+;
+;;###autoload
+(defun crux-urlencode-region (start end)
+  "Decode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((encoded-text
+            (url-hexify-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert encoded-text))))
+
+;;;###autoload
+(defun crux-urldecode-region (start end)
+  "Encode a hex string in the selected region(START END)."
+  (interactive "r")
+  (save-excursion
+    (let* ((decoded-text
+            (url-unhex-string
+             (buffer-substring-no-properties start end))))
+      (delete-region start end)
+      (insert decoded-text))))
 
 (defcustom crux-share-to-transfersh-host "https://transfer.sh"
   "Provider host of transfer.sh."
