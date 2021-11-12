@@ -216,25 +216,37 @@ If PREFIX is not nil, create visit in default-directory"
         (setq session (crux-directory-domain-name)))
     (crux-start-or-switch-to (lambda ()
                                (ansi-term crux-shell (format "%s(%s)" crux-term-buffer-name session)))
-                             (format "*%s(%s)*" crux-term-buffer-name session)))
-  (when (and (null (get-buffer-process (current-buffer)))
-             (y-or-n-p "The process has died.  Do you want to restart it? "))
-    (kill-buffer-and-window)
-    (crux-visit-term-buffer prefix)))
+                             (format "*%s(%s)*" crux-term-buffer-name session))
+    (when (null (get-buffer-process (current-buffer)))
+      (kill-buffer-and-window)
+      (ansi-term crux-shell (format "%s(%s)" crux-term-buffer-name session)))))
+
+(defun crux-visit-shell-buffer (&optional prefix)
+  "Create or visit a terminal buffer.
+If PREFIX is not nil, create visit in default-directory"
+  (interactive "P")
+  (let ((session "0"))
+    (if prefix
+        (setq session (crux-directory-domain-name)))
+    (crux-start-or-switch-to (lambda ()
+                               (shell (format "*shell(%s)*" session)))
+                             (format "*shell(%s)*" session))
+    (when (null (get-buffer-process (current-buffer)))
+      (shell (format "*shell(%s)*" session)))))
 
 ;;;###autoload
-(defun crux-visit-shell-buffer ()
+(defun crux-visit-eshell-buffer ()
   "Create or visit a shell buffer.
 If the process in that buffer died, ask to restart."
   (interactive)
   (crux-start-or-switch-to (lambda ()
-                             (apply crux-shell-func (list crux-shell-buffer-name)))
-                           (format "*%s*" crux-shell-buffer-name))
+                             (apply crux-shell-func '("eshell")))
+                           (format "*%s*" "eshell"))
   (when (and (null (get-buffer-process (current-buffer)))
              (not (eq major-mode 'eshell-mode)) ; eshell has no process
              (y-or-n-p "The process has died.  Do you want to restart it? "))
     (kill-buffer-and-window)
-    (crux-visit-shell-buffer)))
+    (crux-visit-eshell-buffer)))
 
 ;;;###autoload
 (defun crux-indent-rigidly-and-copy-to-clipboard (begin end arg)
