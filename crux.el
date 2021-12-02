@@ -252,6 +252,20 @@ If the process in that buffer died, ask to restart."
     (crux-visit-eshell-buffer)))
 
 ;;;###autoload
+(defun crux-visit-vterm-buffer (&optional prefix)
+  "Create or visit a terminal buffer.
+If PREFIX is not nil, create visit in default-directory"
+  (interactive "P")
+  (let ((session "0"))
+    (if prefix
+        (setq session (crux-directory-domain-name)))
+    (crux-start-or-switch-to (lambda ()
+                               (vterm (format "*vterm(%s)*" session)))
+                             (format "*vterm(%s)*" session))
+    (when (null (get-buffer-process (current-buffer)))
+      (vterm (format "*vterm(%s)*" session)))))
+
+;;;###autoload
 (defun crux-indent-rigidly-and-copy-to-clipboard (begin end arg)
   "Indent region between BEGIN and END by ARG columns and copy to clipboard."
   (interactive "r\nP")
