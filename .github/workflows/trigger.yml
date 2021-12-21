@@ -1,0 +1,12 @@
+---
+name: Trigger
+on:
+  push:
+    branches: [ recipes/* ]
+
+jobs:
+  nope:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: just true
+        run: true

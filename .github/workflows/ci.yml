@@ -5,7 +5,13 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+  workflow_run:
+    workflows:
+      - Trigger
+    types:
+      - completed
+  schedule:
+    - cron:  '25 23 */3 * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
