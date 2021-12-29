@@ -1,5 +1,5 @@
 # [GIA]EL[P]A
-[![Build Status](https://github.com/txgvnn/giaelpa/workflows/ci/badge.svg)](https://github.com/txgvnn/giaelpa/actions)
+[![Build Status](https://github.com/txgvnn/giaelpa/workflows/CI/badge.svg)](https://github.com/txgvnn/giaelpa/actions)
 
 `[GIA]EL[P]A` is my customize Emacs packages archive.
 
