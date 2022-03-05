@@ -39,6 +39,7 @@ jobs:
     - name: Publish package html
       run: |
         cd packages
+        ls -l | awk '{print "<li><a href=\""$9"\">"$9"</a></li>"}' > index.html
         git init --initial-branch=packages
         cp ../.git/config .git/
         git config user.name github-actions
