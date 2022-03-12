@@ -2,10 +2,33 @@
 #+author: Daniel Mendler
 #+language: en
 
-* Development
+* Version 0.16 (2022-03-08)
 
+- Bug fixes
+- Deprecate =consult-project-root-function= in favor of =consult-project-function=.
+- Preconfigure =consult-project-function= with a default function based
+  on project.el.
+- Add =consult-project-buffer=, a variant of =consult-buffer= restricted to the
+  current project.
+- Add =consult-register-prefix= option.
+- Introduced a generic and extensible =consult-register= implementation.
+- Lazy marker creation in =consult-line/outline= (performance improvements)
+
+* Version 0.15 (2022-01-31)
+
+- Bugfixes
+- =consult-xref=: Prettify the group titles, use =xref--group-name-for-display=
+  if available.
+- =consult-focus-lines=: Thanks to @jdtsmith, the command is much faster and
+  actually useable in large files.
+- Added Mct integration, auto refreshing of asynchronous Consult commands.
+
+* Version 0.14 (2021-12-31)
+
+- Bugfixes
 - Add =consult-recent-file-filter=
 - Rename =consult--source-(project-)file= to =consult-source-(project-)recent-file=
+- =consult-keep-lines= makes read-only buffers temporarily writable if confirmed
 
 * Version 0.13 (2021-11-12)
 
