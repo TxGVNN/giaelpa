@@ -839,7 +839,7 @@ Otherwise the `default-directory' is returned."
             ;; TODO Find a better and more general solution which preserves `this-command'.
             (let ((this-command this-command))
               (read-directory-name "Directory: " nil nil t)))
-           (t (or (consult--project-root) default-directory))))
+           (t default-directory)))
          (edir (file-name-as-directory (expand-file-name dir)))
          ;; Bind default-directory in order to find the project
          (pdir (let ((default-directory edir)) (consult--project-root))))
