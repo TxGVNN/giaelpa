@@ -88,13 +88,15 @@
 (defun consult-compile--state ()
   "Like `consult--jump-state', also setting the current compilation error."
   (let ((state (consult--jump-state 'consult-preview-error)))
-    (lambda (marker restore)
+    (lambda (action marker)
       (let ((pos (consult-compile--lookup marker)))
-        (when-let (buffer (and restore marker (marker-buffer marker)))
+        (when-let (buffer (and (eq action 'return)
+                               marker
+                               (marker-buffer marker)))
           (with-current-buffer buffer
             (setq compilation-current-error marker
                   overlay-arrow-position marker)))
-        (funcall state pos restore)))))
+        (funcall state action pos)))))
 
 ;;;###autoload
 (defun consult-compile-error ()
@@ -105,12 +107,11 @@ buffers related to the current buffer.  The command supports
 preview of the currently selected error."
   (interactive)
   (consult--read
-   (consult--with-increased-gc
-    (or (mapcan #'consult-compile--error-candidates
-                (or (consult-compile--compilation-buffers
-                     default-directory)
-                    (user-error "No compilation buffers found for the current buffer")))
-        (user-error "No compilation errors found")))
+   (or (mapcan #'consult-compile--error-candidates
+               (or (consult-compile--compilation-buffers
+                    default-directory)
+                   (user-error "No compilation buffers found for the current buffer")))
+       (user-error "No compilation errors found"))
    :prompt "Go to error: "
    :category 'consult-compile-error
    :sort nil

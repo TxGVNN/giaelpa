@@ -40,7 +40,7 @@
     (?f . "File")
     (?w . "Window"))
   "Register type names.
-Each element of the list must have the form '(char . name).")
+Each element of the list must have the form \\='(char . name).")
 
 (cl-defun consult-register--format-value (val)
   "Format generic register VAL as string."
@@ -124,11 +124,11 @@ SHOW-EMPTY must be t if the window should be shown for an empty register list."
                 '((window-height . fit-window-to-buffer)
                   (preserve-size . (nil . t))))
           nil
-        (setq-local cursor-in-non-selected-windows nil)
-        (setq-local mode-line-format nil)
-        (setq-local truncate-lines t)
-        (setq-local window-min-height 1)
-        (setq-local window-resize-pixelwise t)
+        (setq-local cursor-in-non-selected-windows nil
+                    mode-line-format nil
+                    truncate-lines t
+                    window-min-height 1
+                    window-resize-pixelwise t)
         (insert (mapconcat
                  (lambda (reg)
                    (concat (funcall register-preview-function reg) separator))
@@ -143,7 +143,7 @@ If COMPLETION is non-nil format the register for completion."
                (key-str (propertize (single-key-description key) 'face 'consult-key))
                (key-len (max 3 (length key-str)))
                (`(,str . ,props) (consult-register--describe val)))
-    (when (string-match-p "\n" str)
+    (when (string-search "\n" str)
       (let* ((lines (seq-take (seq-remove #'string-blank-p (split-string str "\n")) 3))
              (space (apply #'min most-positive-fixnum
                            (mapcar (lambda (x) (string-match-p "[^ ]" x)) lines))))
@@ -188,12 +188,11 @@ built-in register access functions. The command supports narrowing, see
     :category 'multi-category
     :state
     (let ((preview (consult--jump-preview)))
-      (lambda (cand restore)
+      (lambda (action cand)
         ;; Preview only markers
-        (funcall preview
+        (funcall preview action
                  (when-let (reg (get-register cand))
-                   (and (markerp reg) reg))
-                 restore)))
+                   (and (markerp reg) reg)))))
     :group (consult--type-group consult-register--narrow)
     :narrow (consult--type-narrow consult-register--narrow)
     :sort nil
@@ -217,9 +216,7 @@ for the meaning of prefix ARG."
   (condition-case err
       (jump-to-register reg arg)
     (user-error
-     (unless (string-match-p
-              "access aborted"
-              (error-message-string err) )
+     (unless (string-search "access aborted" (error-message-string err))
        (insert-register reg (not arg))))))
 
 (defun consult-register--action (action-list)

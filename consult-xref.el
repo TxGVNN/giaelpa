@@ -29,9 +29,10 @@
 (require 'xref)
 
 (defvar consult-xref--history nil)
+(defvar consult-xref--fetcher nil)
 
-(defun consult-xref--candidates (xrefs)
-  "Return candidate list from XREFS."
+(defun consult-xref--candidates ()
+  "Return xref candidate list."
   (let ((root (consult--project-root)))
     (mapcar (lambda (xref)
               (let* ((loc (xref-item-location xref))
@@ -45,23 +46,21 @@
                             (or (xref-location-line loc) 0)
                             (xref-item-summary xref))))
                 (add-text-properties
-                 0 1 `(consult--candidate ,xref consult-xref--group ,group) cand)
+                 0 1 `(consult-xref ,xref consult-xref--group ,group) cand)
                 cand))
-            xrefs)))
+            (funcall consult-xref--fetcher))))
 
 (defun consult-xref--preview (display)
   "Xref preview with DISPLAY function."
   (let ((open (consult--temporary-files))
         (preview (consult--jump-preview)))
-    (lambda (cand restore)
-      (cond
-       (restore
-        (funcall preview nil t)
-        (funcall open nil))
-       (cand
-        (let ((loc (xref-item-location cand))
-              (consult--buffer-display display))
-          (funcall preview
+    (lambda (action cand)
+      (unless cand
+        (funcall open))
+      (let ((consult--buffer-display display))
+        (funcall preview action
+                 (when-let (loc (and cand (eq action 'preview)
+                                     (xref-item-location cand)))
                    ;; Only preview file and buffer markers
                    (cl-typecase loc
                      (xref-buffer-location
@@ -74,8 +73,7 @@
                                   (xref-location-group loc)))
                        (xref-location-line loc)
                        (xref-file-location-column loc)))
-                     (t (message "No preview for %s" (type-of loc)) nil))
-                   nil)))))))
+                     (t (message "No preview for %s" (type-of loc)) nil))))))))
 
 (defun consult-xref--group (cand transform)
   "Return title for CAND or TRANSFORM the candidate."
@@ -90,22 +88,22 @@
 This function can be used for `xref-show-xrefs-function'.
 See `xref-show-xrefs-function' for the description of the
 FETCHER and ALIST arguments."
-  (let ((candidates (consult--with-increased-gc
-                     (consult-xref--candidates (funcall fetcher))))
-        (display (alist-get 'display-action alist)))
+  (let* ((consult-xref--fetcher fetcher)
+         (candidates (consult-xref--candidates))
+         (display (alist-get 'display-action alist)))
     (xref-pop-to-location
      (if (cdr candidates)
          (apply
           #'consult--read
           candidates
           (append
-           (alist-get #'consult-xref consult--read-config)
+           (consult--customize-get #'consult-xref)
            (list
             :prompt "Go to xref: "
             :history 'consult-xref--history
             :require-match t
             :sort nil
-            :category 'xref-location
+            :category 'consult-xref
             :group #'consult-xref--group
             :state
             ;; do not preview other frame
@@ -114,8 +112,8 @@ FETCHER and ALIST arguments."
                              ('window #'switch-to-buffer-other-window)
                              ('nil #'switch-to-buffer)))
               (consult-xref--preview fun))
-            :lookup #'consult--lookup-candidate)))
-       (get-text-property 0 'consult--candidate (car candidates)))
+            :lookup (apply-partially #'consult--lookup-prop 'consult-xref))))
+       (get-text-property 0 'consult-xref (car candidates)))
      display)))
 
 (provide 'consult-xref)
