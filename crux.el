@@ -1055,7 +1055,9 @@ and the entire buffer (in the absense of a region)."
                 msg (format "| base64 -d | openssl aes-256-cbc -d -md md5 -k %s -in - 2>/dev/null"
                             file-hash))))
       (find-file-read-only temp-file)
-      (debpaste-paste-buffer (get-file-buffer temp-file))
+      (let ((debpaste-paste-is-hidden t)
+            (debpaste-expire-time (* 8 3600)))
+        (debpaste-paste-buffer (get-file-buffer temp-file)))
       (let ((output
              (format "curl -L %s 2>/dev/null %s"
                      (debpaste-get-param-val 'download-url (debpaste-get-posted-info)) msg)))
