@@ -1787,7 +1787,7 @@ Optional PROMPT sets the prompt to use."
           (if display-fn (mapcar display-fn choices) choices))
          (chosen (funcall (or completion-fn #'completing-read)
                           prompt formatted-choices
-                          nil 'require-match nil nil)))
+                          nil 'confirm nil nil)))
     (if (eq choices formatted-choices)
         chosen
       (nth (or (cl-position chosen formatted-choices :test #'string=) 0)
