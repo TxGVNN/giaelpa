@@ -1118,5 +1118,18 @@ and the entire buffer (in the absense of a region)."
   (setenv "SSH_AUTH_SOCK" file)
   (message (shell-command-to-string "ssh-add -l")))
 
+;;;###autoload
+(defun crux-calc-eval (start end)
+  "Fast calc on a region(START END)."
+  (interactive "r")
+  (let ((thing (if (use-region-p)
+                   (buffer-substring start end)
+                 (thing-at-point 'line))))
+    (if current-prefix-arg ; replace in that case
+        (progn
+          (if (use-region-p) (goto-char end) (end-of-line))
+          (insert " = " (calc-eval thing)))
+      (message "%s" (calc-eval thing)))))
+
 (provide 'crux)
 ;;; crux.el ends here
