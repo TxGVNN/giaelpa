@@ -985,27 +985,6 @@ and the entire buffer (in the absense of a region)."
   "Provider host of transfer.sh."
   :type 'string
   :group 'crux)
-;;;###autoload
-(defun dired-share-to-transfersh (&optional downloads)
-  "Share file to transfersh.
-- DOWNLOADS: The max-downloads"
-  (interactive "p")
-  (let* ((url crux-share-to-transfersh-host)
-         (filename (file-name-nondirectory (dired-get-file-for-visit)))
-         (msg (format "-o %s" filename)))
-    (when (yes-or-no-p (format "Share %s to %s (%d)?" filename url downloads))
-      (if (yes-or-no-p "Encrypt?")
-          (let ((file-hash (replace-regexp-in-string "\\(.\\{32\\}\\).*" "\\1" (shell-command-to-string (format "md5sum %s -z" filename)))))
-            (shell-command (format "openssl aes-256-cbc -md md5 -k %s -in '%s' -out '%s.enc'"
-                                   file-hash filename filename))
-            (setq msg (format " -o- | openssl aes-256-cbc -d -md md5 -k %s -out %s -in - "
-                              file-hash filename))
-            (setq filename (format "%s.enc" filename))))
-      (let ((output (format "curl -L %s %s"
-                            (shell-command-to-string
-                             (format "curl -q -H 'Max-Downloads: %d' --upload-file '%s' %s 2>/dev/null"
-                                     downloads filename url)) msg)))
-        (kill-new output) (message output)))))
 
 ;;;###autoload
 (defun crux-share-to-transfersh (&optional downloads)
@@ -1130,6 +1109,53 @@ and the entire buffer (in the absense of a region)."
           (if (use-region-p) (goto-char end) (end-of-line))
           (insert " = " (calc-eval thing)))
       (message "%s" (calc-eval thing)))))
+
+;;; DIRED ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;###autoload
+(defun dired-share-to-transfersh (&optional downloads)
+  "Share file to transfersh.
+- DOWNLOADS: The max-downloads"
+  (interactive "p")
+  (let* ((url crux-share-to-transfersh-host)
+         (filename (file-name-nondirectory (dired-get-file-for-visit)))
+         (msg (format "-o %s" filename)))
+    (when (yes-or-no-p (format "Share %s to %s (%d)?" filename url downloads))
+      (if (yes-or-no-p "Encrypt?")
+          (let ((file-hash (replace-regexp-in-string "\\(.\\{32\\}\\).*" "\\1" (shell-command-to-string (format "md5sum %s -z" filename)))))
+            (shell-command (format "openssl aes-256-cbc -md md5 -k %s -in '%s' -out '%s.enc'"
+                                   file-hash filename filename))
+            (setq msg (format " -o- | openssl aes-256-cbc -d -md md5 -k %s -out %s -in - "
+                              file-hash filename))
+            (setq filename (format "%s.enc" filename))))
+      (let ((output (format "curl -L %s %s"
+                            (shell-command-to-string
+                             (format "curl -q -H 'Max-Downloads: %d' --upload-file '%s' %s 2>/dev/null"
+                                     downloads filename url)) msg)))
+        (kill-new output) (message output)))))
+
+(declare-function dired-get-marked-files "dired")
+(declare-function dired-dwim-target-directory "dired")
+;;;###autoload
+(defun dired-ediff-files ()
+  "Ediff 2 files on `dired."
+  (interactive)
+  (let ((files (dired-get-marked-files))
+        (wnd (current-window-configuration)))
+    (if (<= (length files) 2)
+        (let ((file1 (car files))
+              (file2 (if (cdr files)
+                         (cadr files)
+                       (read-file-name
+                        "file: "
+                        (dired-dwim-target-directory)))))
+          (if (file-newer-than-file-p file1 file2)
+              (ediff-files file2 file1)
+            (ediff-files file1 file2))
+          (add-hook 'ediff-after-quit-hook-internal
+                    (lambda ()
+                      (setq ediff-after-quit-hook-internal nil)
+                      (set-window-configuration wnd))))
+      (error "No more than 2 files should be marked"))))
 
 (provide 'crux)
 ;;; crux.el ends here
