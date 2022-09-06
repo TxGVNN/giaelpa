@@ -1091,7 +1091,7 @@ and the entire buffer (in the absense of a region)."
 (defun crux-ssh-set-auth-sock(&optional file)
   "Set ssh-auth-sock(FILE)."
   (interactive
-   (list (read-file-name "Select SSH_AUTH_SOCK file: " "/tmp/" nil t "ssh")))
+   (list (read-file-name "Select SSH_AUTH_SOCK file: " temporary-file-directory nil t "ssh")))
   (if (not (file-name-absolute-p file))
       (user-error "%s is not an absolute path" file))
   (setenv "SSH_AUTH_SOCK" file)
