@@ -599,17 +599,15 @@ EVENT is the click event triggering this function call."
 (defun persp-update-modestring ()
   "Update the string to reflect the current perspectives.
 Has no effect when `persp-show-modestring' is nil."
-  (when persp-show-modestring
+  (when (and persp-show-modestring (persp-name (persp-curr)))
     (let ((open (list (nth 0 persp-modestring-dividers)))
-          (close (list (nth 1 persp-modestring-dividers)))
-          (sep (nth 2 persp-modestring-dividers)))
-      (set-frame-parameter nil 'persp--modestring
-           (append open
-                   (if persp-modestring-short
-                       (list (persp-current-name))
-                     (persp-intersperse (mapcar 'persp-format-name
-                                                (persp-names)) sep))
-                   close)))))
+          (close (list (nth 1 persp-modestring-dividers))))
+      (set-frame-parameter
+       nil 'persp--modestring
+       (append open
+               (cons (propertize
+                      (file-name-nondirectory (directory-file-name (persp-name (persp-curr))))
+                      'face 'persp-selected-face)()) close)))))
 
 (defun persp-format-name (name)
   "Format the perspective name given by NAME for display in the mode line or header line."
