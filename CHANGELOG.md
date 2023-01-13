@@ -2,6 +2,14 @@
 
 ## master (unreleased)
 
+* [#94](https://github.com/bbatsov/crux/pull/94): Add `crux-with-region-or-sexp-or-line`.
+* [#92](https://github.com/bbatsov/crux/pull/92): Consider derived modes when checking for major mode (`dired`, `org-mode`, `eshell`).
+
+### Bugs fixed
+
+* More robust `crux-rename-file-and-buffer`.
+* Fix `sudo` not found error in OpenBSD and Alpine Linux (they use `doas`).
+
 ## 0.4.0 (2021-08-10)
 
 ### New features
@@ -27,5 +35,5 @@
 
 * Fixed extra line issue when duplicating region.
 * Various small fixes that we were too lazy to document properly.
-
+* Fixed `sudo` not found in OpenBSD and Alpine Linux
 ## 0.3.0 (2016-05-31)
