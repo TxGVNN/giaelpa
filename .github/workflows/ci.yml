@@ -23,6 +23,15 @@ jobs:
       with:
         fetch-depth: 2
         submodules: true
+    - name: Guix cache
+      if: ${{ ! steps.guix_pack_cache.outputs.cache-hit }}
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/guix
+        key: guix-cache
+        restore-keys: |
+          guix-cache
     - name: Install Guix
       id: install-guix
       uses: PromyLOPh/guix-install-action@v1
