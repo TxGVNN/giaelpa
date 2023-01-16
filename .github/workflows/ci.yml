@@ -35,5 +35,22 @@ jobs:
                   (channel
                    (name 'guxti)
                    (url "https://github.com/TxGVNN/guxti")))
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+    - name: Install packages
+      shell: bash
+      run: |
+        guix package -m manifest.scm
+    - name: Build Emacs Lisp Package Archive
+      shell: bash
+      run: |
+        emacs --batch -nw -l ~/.guix-profile/share/emacs/site-lisp/elpa-mirror-2.2.0-20230115/elpa-mirror-autoloads.el --eval '(elpamr-create-mirror-for-installed "packages")'
+    - name: Publish packages
+      run: |
+        cd packages
+        ls -l | awk '{print "<li><a href=\""$9"\">"$9"</a></li>"}' > index.html
+        git init --initial-branch=packages
+        cp ../.git/config .git/
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add .
+        git commit -m "Build packages"
+        git push --force origin packages
