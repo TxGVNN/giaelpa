@@ -51,7 +51,7 @@ jobs:
     - name: Build Emacs Lisp Package Archive
       shell: bash
       run: |
-        . ~/.guix-profile/etc/profile"
+        . ~/.guix-profile/etc/profile
         emacs --batch -nw -l ~/.guix-profile/share/emacs/site-lisp/elpa-mirror-2.2.0-20230115/elpa-mirror-autoloads.el --eval '(elpamr-create-mirror-for-installed "packages")'
     - name: Publish packages
       run: |
