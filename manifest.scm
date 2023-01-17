@@ -30,6 +30,7 @@
         "emacs-marginalia"
         "emacs-move-text"
         "emacs-multiple-cursors"
+        "emacs-next"
         "emacs-orderless"
         "emacs-perspective@2.16-7-20230114"
         "emacs-pinentry"
