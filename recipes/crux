@@ -1,4 +1,0 @@
-(crux
- :fetcher github
- :repo "TxGVNN/giaelpa"
- :branch "recipes/crux")

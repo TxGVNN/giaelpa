@@ -7,4 +7,4 @@
 (add-to-list 'package-archives '("giaelpa" . "https://txgvnn.github.io/giaelpa/"))
 ```
 
-Source code by [Melpa/melpa](https://github.com/melpa/melpa)
+Powerful by [Guix](https://guix.gnu.org/)

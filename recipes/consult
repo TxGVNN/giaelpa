@@ -1,3 +1,0 @@
-(consult
- :repo "TxGVNN/giaelpa" :branch "recipes/consult"
- :fetcher github)
