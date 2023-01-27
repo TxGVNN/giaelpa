@@ -48,4 +48,5 @@
         "emacs-vterm"
         "emacs-vundo"
         "emacs-yasnippet"
+        "emacs-yasnippet-snippets@1.0.20230127"
         "emacs-ztree"))
