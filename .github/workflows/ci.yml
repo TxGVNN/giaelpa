@@ -54,7 +54,8 @@ jobs:
         . ~/.guix-profile/etc/profile
         mkdir -p ~/.emacs.d
         cp early-init.el ~/.emacs.d/
-        emacs --batch -nw -l ~/.guix-profile/share/emacs/site-lisp/elpa-mirror-2.2.0.20230115/elpa-mirror-autoloads.el --eval '(elpamr-create-mirror-for-installed "packages")'
+        export elpa_mirror_dir=$(find ~/.guix-profile/share/ -name elpa-mirror\*)
+        emacs --batch -nw -l ${elpa_mirror_dir}/elpa-mirror-autoloads.el --eval '(elpamr-create-mirror-for-installed "packages")'
     - name: Publish packages
       run: |
         cd packages
