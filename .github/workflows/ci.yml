@@ -34,7 +34,7 @@ jobs:
           guix-cache
     - name: Install Guix
       id: install-guix
-      uses: PromyLOPh/guix-install-action@v1
+      uses: TxGVNN/guix-install-action@v1
       with:
         channels: |-
             (list (channel
